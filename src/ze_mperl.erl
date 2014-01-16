@@ -1,5 +1,5 @@
 %% @author rongjie
-%% @email zsuzhang@qq.com
+%% @email zsuzhang(@)qq.com
 %% @doc meta programming for erlang
 
 

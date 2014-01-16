@@ -14,11 +14,13 @@
 
 unique_test() ->
     ?assertEqual(unique([1,2,1,2,3,6]), [1,2,3,6]),
+	?assertEqual(unique([{a,b,c}, {1,2,3}, {d,e,f}]), [{1,2,3}, {a,b,c}, {d,e,f}]),
     ok.
 
-
-
-
+keyunique_test() ->
+	?assertEqual(keyunique(1, [{a,b,c}, {1,2,3}, {d,a,f}]), [{1,2,3}, {a,b,c}, {d,a,f}]),
+	ok.
+ 
 
 %% ====================================================================
 %% Internal functions

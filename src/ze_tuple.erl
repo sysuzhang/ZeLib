@@ -1,5 +1,5 @@
 %% @author rongjie
-%% @email zsuzhang@qq.com
+%% @email zsuzhang(@).com
 %% @doc @todo Add description to ze_tuple.
 
 
