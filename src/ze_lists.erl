@@ -12,8 +12,18 @@
 -export([keyunique/2]).
 
 
-unique(List) ->
-    sets:to_list(sets:from_list(List)).
+unique(List) -> 
+    unique(List, []).
+unique([], List) ->
+    [erlang:erase({ze_lists, Key}) || Key <- List],
+    lists:reverse(List);
+unique([H|Tail], List) ->
+    case erlang:put({ze_lists, H}, H) of
+        undefined ->
+            unique(Tail, [H|List]);
+        _OldVal ->
+            unique(Tail, List)
+    end.
 
 keyunique(Keypos, TupleList) ->
     keyunique(Keypos, TupleList, orddict:new()).
