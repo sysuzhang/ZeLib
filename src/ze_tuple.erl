@@ -11,8 +11,7 @@
 -export([nth/2]).
 
 nth(Pos, Tuple) ->
-    List = tuple_to_list(Tuple),
-    lists:nth(Pos, List).
+    erlang:element(Pos, Tuple).
 
 %% ====================================================================
 %% Internal functions
