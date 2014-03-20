@@ -10,6 +10,13 @@
 %% ====================================================================
 -export([get_timestamp/0, get_longtimestamp/0]).
 -export([get_datetime_timestamp/1, get_timestamp_datetime/1]).
+-export([get_timestamp_year_month_day/1]).
+-export([str_timestamp/1]).
+-export([weekday/0, weekday/1,
+         midnight/0, midnight/1,
+         next_midnight/0, next_midnight/1,
+         next_weekday_timestamp/1, 
+         next_month_firstmidnight/0, next_month_firstmidnight/1]).
 
 %% for replace erlang:now(), because of erlang:now() function has performance problem
 %% 取得当前的时间戳
@@ -42,6 +49,8 @@ get_timestamp_year_month_day(TimeStamp) ->
     {{Y, M, D}, {_HH, _MM, _SS}} = get_timestamp_datetime(TimeStamp),
     {Y,M,D}.
 
+get_datetime() ->
+    get_timestamp_datetime(get_timestamp()).
 
 %% 指定时间的凌晨0点的time
 midnight(TimeStamp) ->
@@ -64,6 +73,19 @@ next_month_firstmidnight() ->
 next_month_firstmidnight(TimeStamp) ->
     {{Y, M, D}, _} = get_timestamp_datetime(TimeStamp), 
     midnight(TimeStamp) + ?SECONDS_OF_DAY * (calendar:last_day_of_the_month(Y, M)-D+1).
+
+weekday() ->
+    {{Year, Month, Day}, {_HH, _MM, _SS}} = get_datetime(),
+    calendar:day_of_the_week(Year, Month, Day).
+
+weekday(TimeStamp) -> 
+    {{Year, Month, Day}, {_HH, _MM, _SS}} = get_timestamp_datetime(TimeStamp),
+    calendar:day_of_the_week(Year, Month, Day).
+
+next_weekday_timestamp(WeekDay) ->
+    Diff = WeekDay - weekday() + ?DAY_OF_WEEK,
+    midnight() + Diff * ?SECONDS_OF_DAY.
+
 %% ====================================================================
 %% Internal functions
 %% ====================================================================
