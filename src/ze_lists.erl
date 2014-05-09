@@ -10,7 +10,7 @@
 %% ====================================================================
 -export([unique/1]).
 -export([keyunique/2]). 
--export([pair_list/1]).
+-export([pair_list/1, make_pair/2]).
 -export([store/3, replace/3]).
 
 %% unique(List) -> 
@@ -30,6 +30,7 @@
 %% unique(List) ->
 %% 	sets:to_list(sets:from_list(List)).
 
+%%Sample: unique([1,1,2,2,3,3]) ->[1,2,3]
 unique(List) ->
 	lists:usort(List).
 
@@ -41,9 +42,11 @@ unique(List) ->
 %%     Key = ze_tuple:nth(Keypos, Tuple),
 %%     keyunique(Keypos, List, orddict:store(Key, Tuple, Result)).
 
+%%Sample: keyunique(1, [{1,2}, {1,3}, {1,4}, {2,2}, {2,3}, {3,4}]) -> [{1,2}, {2,2},{3,4}]
 keyunique(Keypos, TupleList) ->
 	lists:ukeysort(Keypos, TupleList).
     
+%%Sample: pair_list([1,2,3,4,5,6,7,8]) -> [{1,2}, {3,4}, {5,6}, {7,8}]
 pair_list(List) ->
     tuple_list(2, List).
 
@@ -78,6 +81,12 @@ store(Fun, [H|T], NewElem, RepalceFlag, Result) ->
             store(Fun, T, NewElem, RepalceFlag, [H|Result])
     end.
 
+
+%%Sample:
+%% replayer(fun(E) -> E rem 2 =:= 0 end,
+%%          [1,2,3,4,5,6],
+%%          10) -> [1,10,3,10,5,10]
+%%
 replace(Fun, List, NewElem) ->
     lists:map(fun(E) ->
                         case Fun(E) of
@@ -88,7 +97,16 @@ replace(Fun, List, NewElem) ->
                         end
                 end, List).
 
+%%Sample: make_pair([1,2,3,4,5], [6,7,8,9,10]) -> [{1,6}, {2,7}, {3, 8}, {4, 9}, {5, 10}]
+make_pair(List1, List2) ->
+    make_pair(List1, List2, []).
 
+make_pair([], _, R) ->
+    lists:reverse(R);
+make_pair(_, [], R) ->
+    lists:reverse(R);
+make_pair([H1|List1], [H2|List2], R) ->
+    make_pair(List1, List2, [{H1, H2}|R]).
 
 %% ====================================================================
 %% Internal functions
